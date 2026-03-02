@@ -35,11 +35,8 @@
   --color-earth-clay: #8B7355;
   --color-earth-stone: #6B6B6B;
 
-  /* Fonts - placeholders, swap with chosen fonts during build */
-  /* Direction: warm, readable, not corporate */
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-serif: Georgia, Cambria, "Times New Roman", serif;
-  --font-mono: Menlo, Monaco, Consolas, monospace;
+  /* Fonts: set via next/font in layout.tsx as --font-heading, --font-body, --font-mono */
+  /* To swap fonts site-wide, change the imports in layout.tsx */
 
   /* Animations */
   --animate-fade-in: fade-in 0.5s ease-in-out;
@@ -64,5 +61,13 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+code, pre, kbd, samp {
+  font-family: var(--font-mono);
 }

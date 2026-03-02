@@ -11,6 +11,30 @@ export interface PostFrontmatter {
   tags?: string[];
   heroImage?: string;
   published?: boolean;
+  hook?: string;
+  readTime?: string;
+  song?: {
+    title: string;
+    artist: string;
+    url?: string;
+  };
+  video?: {
+    title: string;
+    url?: string;
+  };
+  narration?: {
+    title: string;
+    url?: string;
+  };
+  references?: Array<{
+    title: string;
+    url: string;
+    description?: string;
+  }>;
+  cta?: {
+    text: string;
+    url: string;
+  };
 }
 
 export interface PostMeta extends PostFrontmatter {
