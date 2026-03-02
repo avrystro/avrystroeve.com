@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# avrystroeve.com
 
-## Getting Started
+Personal blog and brand hub.
 
-First, run the development server:
+## Setup
 
 ```bash
+git clone git@github.com:avrystro/avrystroeve.com.git
+cd avrystroeve.com
+npm install
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Copy `.env.example` to `.env.local` and fill in values:
 
-## Learn More
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `NEXT_PUBLIC_POSTHOG_KEY` | No (Phase 4) | PostHog project API key |
+| `NEXT_PUBLIC_POSTHOG_HOST` | No (Phase 4) | PostHog ingest endpoint |
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+src/
+  app/              # App Router pages
+  components/       # React components
+    rune/           # AI chat interface
+    blog/           # Blog post layout and media
+    ui/             # Shared components
+    providers/      # Analytics and context providers
+  content/posts/    # MDX blog posts
+  lib/              # Utilities
+public/             # Static assets
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Scripts
 
-## Deploy on Vercel
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Production build |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Deployed to [Vercel](https://vercel.com). Pushes to `main` trigger automatic deployments.
+
+Domain: [avrystroeve.com](https://avrystroeve.com)
+
+## Blog Posts
+
+Blog posts are MDX files in `src/content/posts/`. Each post has YAML frontmatter:
+
+```yaml
+---
+title: "Post Title"
+date: "2026-03-02"
+description: "Short description for listings and SEO."
+tags: ["tag1", "tag2"]
+heroImage: "/images/post-hero.jpg"
+published: true
+---
+```
+
+## Architecture
+
+This is the **code repo** (body). Planning, decisions, and content strategy live in the **brain repo** at `~/Developer/app.avry/blog/`. See `CLAUDE.md` for details.
