@@ -30,9 +30,46 @@ This project follows the rules at `~/Developer/app.avry/rules/`:
 - Next.js 16 (App Router) + TypeScript
 - Tailwind CSS v4 (design tokens in globals.css via @theme)
 - MDX for blog posts (src/content/posts/)
-- GSAP for animations
+- GSAP for animations (SplitText + ScrollSmoother now free)
 - PostHog for analytics (client-side)
 - Vercel for hosting
+
+## Design System Principles
+
+The design system is grounded in sacred geometry - golden ratio, Fibonacci sequence, and temple architecture proportions. This is NOT decorative. It IS the infrastructure. Every spacing value, font size, and proportion derives from these mathematical relationships.
+
+**Full research:** `~/Developer/app.avry/blog/research/sacred-design-system.md`
+
+### The Rules (Non-Negotiable)
+
+1. **Typography scale = golden ratio (phi = 1.618) from 18px base.** Each step up multiplies by phi or sqrt(phi). Defined as `--font-size-*` tokens in globals.css. Never use arbitrary font sizes.
+
+2. **Spacing = Fibonacci sequence.** Values: 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144px. Defined as `--spacing-*` tokens. Never use spacing values outside this scale (no 10px, 16px, 24px, etc.).
+
+3. **Line heights = sacred ratios.** Headings: 1.272 (sqrt(phi)). Subheadings: 1.414 (sqrt(2)). Body: 1.618 (phi). Spacious: 1.732 (sqrt(3)). Defined as `--leading-*` tokens.
+
+4. **Content width = 42rem (~672px).** Derived from golden ratio typography formula: line-height^2. This is the reading column width.
+
+5. **Two-column layouts = 61.8% / 38.2%.** The golden split. Content gets the major portion.
+
+6. **Border radius = Fibonacci.** 3, 5, 8, 13, 21px. Defined as `--radius-*` tokens.
+
+7. **Colors are temple-derived.** Two palettes in globals.css: "Current" and "Temple". Temple palette comes from Egyptian (lapis lazuli, gold leaf, ochre), Greek (polychrome pigments), and Gothic (stained glass) sources. Gold + Lapis = near-complementary pair (175 degrees on color wheel).
+
+### How to Use
+
+- Use Tailwind classes that reference the design tokens: `text-[length:var(--font-size-lg)]`, `p-[length:var(--spacing-13)]`, etc.
+- Or use the semantic Tailwind names that map to these values once finalized.
+- When building new components, check globals.css `@theme` for available tokens FIRST.
+- If you need a value that doesn't exist in the scale, you're probably doing it wrong. Find the nearest Fibonacci/phi value.
+
+### Aesthetic Direction
+
+- Light base, dark accents, blue + gold, warm/regal/temple
+- Two tones: clean/modern for chat interface, temple/oasis for content spaces
+- Ma (meaningful emptiness): generous whitespace IS the design, not wasted space
+- Wabi-sabi: subtle texture, warm off-whites, organic over mechanical
+- Screen-as-stained-glass: colors are light, use luminous quality intentionally
 
 ## Key Directories
 
