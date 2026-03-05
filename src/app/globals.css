@@ -5,6 +5,68 @@
 /* Direction: light base, dark accents, blue + gold, warm/regal/temple */
 
 @theme {
+  /* ============================================================
+     SACRED PROPORTIONS (Golden Ratio + Fibonacci)
+     Foundation: phi (1.618), sqrt(phi) (1.272), Fibonacci sequence.
+     Research: ~/Developer/app.avry/blog/research/sacred-design-system.md
+     ============================================================ */
+
+  /* Typography Scale - Golden Ratio from 18px base (our body size)
+     Each step = previous x phi (1.618) or sqrt(phi) (1.272)
+     To change the entire type scale, adjust --font-size-base only. */
+  --font-size-micro: 0.618rem;     /* 9.89px - captions, fine print */
+  --font-size-small: 0.786rem;     /* 12.57px - small text, metadata */
+  --font-size-base: 1.125rem;      /* 18px - body text */
+  --font-size-mid: 1.431rem;       /* 22.9px - large body, lead text */
+  --font-size-lg: 1.821rem;        /* 29.1px - H5, small headings */
+  --font-size-xl: 2.315rem;        /* 37px - H4 */
+  --font-size-2xl: 2.945rem;       /* 47.1px - H3 */
+  --font-size-3xl: 4.764rem;       /* 76.2px - H2 */
+  --font-size-4xl: 7.708rem;       /* 123.3px - H1 */
+  --font-size-display: 12.472rem;  /* 199.6px - Display / Hero */
+
+  /* Line Heights - Sacred Ratios
+     Body breathes at phi. Headings use sqrt(phi) for tighter rhythm. */
+  --leading-tight: 1.272;     /* sqrt(phi) - headings */
+  --leading-snug: 1.414;      /* sqrt(2) / ad quadratum - subheadings */
+  --leading-normal: 1.618;    /* phi - body text */
+  --leading-relaxed: 1.732;   /* sqrt(3) / ad triangulum - spacious body */
+
+  /* Spacing Scale - Fibonacci (px converted to rem)
+     These are phi^n x 8 rounded to nearest Fibonacci number.
+     Tight at micro level, expansive at macro level. Organic growth. */
+  --spacing-1: 1px;
+  --spacing-2: 0.125rem;       /* 2px - thin borders */
+  --spacing-3: 0.1875rem;      /* 3px - subtle gaps */
+  --spacing-5: 0.3125rem;      /* 5px - small padding */
+  --spacing-8: 0.5rem;         /* 8px - standard unit */
+  --spacing-13: 0.8125rem;     /* 13px - component spacing */
+  --spacing-21: 1.3125rem;     /* 21px - medium spacing */
+  --spacing-34: 2.125rem;      /* 34px - section gaps */
+  --spacing-55: 3.4375rem;     /* 55px - large sections */
+  --spacing-89: 5.5625rem;     /* 89px - hero spacing */
+  --spacing-144: 9rem;         /* 144px - full-bleed padding */
+
+  /* Content Width - Golden Ratio Typography Formula
+     content-width = line-height^2. With 18px body at 1.618 line-height:
+     29.1^2 = ~847px. Adjusted to 42rem for reading comfort (45-75 chars). */
+  --width-content: 42rem;       /* ~672px - optimal reading column */
+  --width-wide: 68rem;          /* ~1088px - wide content */
+  --width-full: 110rem;         /* ~1760px - max container */
+  --width-golden-major: 61.8%;  /* phi / (1 + phi) - larger portion */
+  --width-golden-minor: 38.2%;  /* 1 / (1 + phi) - smaller portion */
+
+  /* Border Radius - Fibonacci */
+  --radius-sm: 3px;
+  --radius-md: 5px;
+  --radius-lg: 8px;
+  --radius-xl: 13px;
+  --radius-2xl: 21px;
+
+  /* ============================================================
+     CURRENT PALETTE (Session 37-38)
+     ============================================================ */
+
   /* Light base */
   --color-cream-50: #FFFDF7;
   --color-cream-100: #FFF9E8;
@@ -34,6 +96,35 @@
   --color-earth-sand: #C2B280;
   --color-earth-clay: #8B7355;
   --color-earth-stone: #6B6B6B;
+
+  /* ============================================================
+     TEMPLE PALETTE (Sacred Geometry Research - Session 39)
+     Derived from Egyptian, Greek, and Gothic temple pigments.
+     Gold + Lapis = near-complementary (175 degrees apart).
+     Compare against current palette on /dev/style-guide.
+     ============================================================ */
+
+  /* Temple core */
+  --color-temple-gold: #C5973A;
+  --color-temple-gold-light: #E8D09A;
+  --color-temple-gold-dark: #8B6914;
+
+  /* Temple blues (lapis lazuli family) */
+  --color-temple-lapis: #1E3F66;
+  --color-temple-lapis-light: #2D5DA1;
+  --color-temple-lapis-deep: #0D1B2A;
+
+  /* Temple neutrals */
+  --color-temple-sandstone: #E8DCC8;
+  --color-temple-parchment: #F5F0E6;
+  --color-temple-midnight: #1A1A1A;
+  --color-temple-bone: #F0E6D2;
+
+  /* Temple accents */
+  --color-temple-ochre: #8B3A2A;
+  --color-temple-malachite: #2E5E4E;
+  --color-temple-ruby: #8B1A1A;
+  --color-temple-amethyst: #5B2C6F;
 
   /* Fonts: set via next/font in layout.tsx as --font-heading, --font-body, --font-mono */
   /* To swap fonts site-wide, change the imports in layout.tsx */
