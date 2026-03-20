@@ -137,6 +137,29 @@ These must be answered BEFORE building:
 - [ ] Funnel: social -> landing -> signup -> content
 - [ ] Email integration (Resend? Loops? ConvertKit?)
 
+## Unanswered Questions (Avry must answer before building)
+
+These surfaced at end of Session 59. They change the architecture:
+
+1. **What is Rune's role?** Already have AI chat interface in codebase. Is Rune THE differentiator - an AI trained on 230+ frameworks that members talk to in real time? If so, that's not a feature, that's the product. Changes the entire architecture.
+
+2. **Walk through a member's first 10 minutes.** Someone pays $29, logs in. What do they see? What do they do first? What keeps them coming back tomorrow? The tier structure exists but not the experience.
+
+3. **What's free vs what's $29?** Of the 90+ material files and 230+ frameworks - where's the line? Blog free, frameworks paid? Everything free, community paid? Rune free, depth paid? The gating boundary defines the page architecture.
+
+4. **Do you have people who'd pay today?** Not hypothetically. Right now. If checkout existed tomorrow, would 5 people pay $29? This determines landing page first vs member experience first.
+
+5. **Where does coaching happen?** $99 sessions and $297/mo group coaching - inside the app (video, scheduling, chat)? Or app is content/community layer and coaching is Zoom + Cal.com externally? Massive scope question.
+
+## Missing from Research Plan
+
+These were identified but not yet added to the research domains:
+
+- **Rune / AI assistant architecture** — if this is the differentiator, needs own research domain. RAG vs fine-tuning vs structured prompts. How to build knowledge-grounded chatbot on framework library.
+- **UX teardowns of indie education platforms** — not Skool/Whop features, but actual custom-built sites. Tiago Forte, Ali Abdaal, others doing this on their own domain.
+- **Legal basics** — terms of service, privacy policy, refund policy. Required before taking payments.
+- **Content pipeline** — actual workflow of markdown in app.avry -> rendered on site. Build system or manual deploy?
+
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
