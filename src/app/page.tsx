@@ -148,7 +148,7 @@ export default function HomePage() {
             </p>
             <p>
               I am an explorer of conversation, of words, of how things work.
-              I live for the exploration -not only of my own mind, but of
+              I live for the exploration - not only of my own mind, but of
               other people's minds, their memories, desires, and dreams.
               Machines and computers and inventions. Economies. The world.
             </p>
@@ -214,7 +214,7 @@ export default function HomePage() {
               },
               {
                 title: "Language Shapes Reality",
-                text: "The words I use -internally and externally -literally create my experience. Definitive language creates certainty. Present tense creates presence. I speak in 'I am' and 'I will,' never 'I hope' or 'I might.'",
+                text: "The words I use - internally and externally - literally create my experience. Definitive language creates certainty. Present tense creates presence. I speak in 'I am' and 'I will,' never 'I hope' or 'I might.'",
               },
               {
                 title: "Systems That Compound Daily",
