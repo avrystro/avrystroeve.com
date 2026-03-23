@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://avrystroeve.com/sitemap.xml

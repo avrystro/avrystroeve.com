@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat, Inter, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
+import { Nav } from "@/components/nav";
 
 const headingFont = Montserrat({
   variable: "--font-heading",
@@ -50,7 +51,10 @@ export default function RootLayout({
       <body
         className={`${headingFont.variable} ${bodyFont.variable} ${monoFont.variable} antialiased grain`}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <Nav />
+          {children}
+        </Providers>
       </body>
     </html>
   );
