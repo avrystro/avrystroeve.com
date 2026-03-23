@@ -1,23 +1,18 @@
 import type { Metadata } from "next";
-import {
-  EB_Garamond,
-  Libre_Baskerville,
-  IBM_Plex_Mono,
-} from "next/font/google";
+import { Montserrat, Inter, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 
-// Global font tokens - swap these to change typography site-wide
-const headingFont = EB_Garamond({
+const headingFont = Montserrat({
   variable: "--font-heading",
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-const bodyFont = Libre_Baskerville({
+const bodyFont = Inter({
   variable: "--font-body",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["300", "400", "500", "600"],
 });
 
 const monoFont = IBM_Plex_Mono({
@@ -28,7 +23,21 @@ const monoFont = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: "Avry Stroeve",
-  description: "Getting people into things.",
+  description:
+    "Explorer. Builder. Creator. God-first living, AI-amplified building, sovereign community.",
+  openGraph: {
+    title: "Avry Stroeve",
+    description:
+      "Explorer. Builder. Creator. God-first living, AI-amplified building, sovereign community.",
+    type: "website",
+    url: "https://avrystroeve.com",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Avry Stroeve",
+    description:
+      "Explorer. Builder. Creator. God-first living, AI-amplified building, sovereign community.",
+  },
 };
 
 export default function RootLayout({
@@ -39,11 +48,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${headingFont.variable} ${bodyFont.variable} ${monoFont.variable} antialiased`}
+        className={`${headingFont.variable} ${bodyFont.variable} ${monoFont.variable} antialiased grain`}
       >
-        <Providers>
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
