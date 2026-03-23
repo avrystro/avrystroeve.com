@@ -131,7 +131,7 @@ export default function HomePage() {
               About
             </p>
             <h2 className="text-3xl sm:text-4xl font-600 leading-snug mb-8">
-              I am called. God is the source. Everything else is expression.
+              God / Infinity / Allah / Dios / Aum is #1. Everything else is expression.
             </h2>
           </div>
           <div className="reveal space-y-6 text-gray-600 text-lg leading-relaxed font-light">
