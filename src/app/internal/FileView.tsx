@@ -232,13 +232,44 @@ function MarkdownView({ payload }: { payload: Extract<FilePayload, { kind: 'mark
 
 function CanvasView({ segments }: { segments: string[] }) {
   const pathStr = useMemo(() => segments.join('/'), [segments])
+  const isScratch = pathStr === 'whiteboards/scratch.excalidraw'
+  const router = useRouter()
   const apiRef = useRef<ExcalidrawImperativeAPI | null>(null)
   const lastServerSerialRef = useRef('')
+  const lastSavedDocRef = useRef<unknown>(null)
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [initial, setInitial] = useState<ExcalidrawInitialDataState | null>(null)
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
   const [lastSync, setLastSync] = useState('—')
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const [savingAs, setSavingAs] = useState(false)
+
+  async function saveAsNew() {
+    if (!lastSavedDocRef.current) {
+      alert('Nothing to save yet — draw something first.')
+      return
+    }
+    const raw = prompt('Save scratch as new whiteboard. Name (no extension):', '')
+    if (!raw) return
+    const slug = raw.toLowerCase().trim().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '')
+    if (!slug) {
+      alert('Invalid name.')
+      return
+    }
+    const newPath = `whiteboards/${slug}.excalidraw`
+    setSavingAs(true)
+    const res = await fetch(`/api/canvas/${newPath}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(lastSavedDocRef.current),
+    })
+    setSavingAs(false)
+    if (!res.ok) {
+      alert('Save failed.')
+      return
+    }
+    router.push(`/internal/${newPath}`)
+  }
 
   async function loadDoc(): Promise<ExcalidrawDoc> {
     const res = await fetch(`/api/canvas/${pathStr}`, { cache: 'no-store' })
@@ -290,6 +321,7 @@ function CanvasView({ segments }: { segments: string[] }) {
       const serial = JSON.stringify({ elements: doc.elements, appState: cleaned })
       if (serial === lastServerSerialRef.current) return
       lastServerSerialRef.current = serial
+      lastSavedDocRef.current = doc
       await fetch(`/api/canvas/${pathStr}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -309,9 +341,26 @@ function CanvasView({ segments }: { segments: string[] }) {
 
   return (
     <div className="flex flex-col h-full min-h-0">
-      <div className="flex items-center justify-end gap-4 text-xs font-mono text-[#888] border-b border-[#222] px-4 py-1.5">
-        <span>status: <span className={status === 'ready' ? 'text-klein' : 'text-[#ffd166]'}>{status}</span></span>
-        <span>last sync: {lastSync}</span>
+      <div className="flex items-center justify-between gap-4 text-xs font-mono text-[#888] border-b border-[#222] px-4 py-1.5">
+        <div className="flex items-center gap-3">
+          {isScratch && (
+            <>
+              <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-[#8b5cf6]/15 text-[#8b5cf6] border border-[#8b5cf6]/30">scratch</span>
+              <button
+                onClick={saveAsNew}
+                disabled={savingAs}
+                className="text-xs px-2.5 py-1 rounded border border-klein/30 text-klein hover:bg-klein/10 disabled:opacity-50 transition-colors"
+              >
+                {savingAs ? 'Saving…' : 'Save as new whiteboard'}
+              </button>
+              <span className="text-[10px] text-[#555]">tip: hamburger menu → Reset canvas to clear</span>
+            </>
+          )}
+        </div>
+        <div className="flex items-center gap-4">
+          <span>status: <span className={status === 'ready' ? 'text-klein' : 'text-[#ffd166]'}>{status}</span></span>
+          <span>last sync: {lastSync}</span>
+        </div>
       </div>
       <div className="flex-1 min-h-0">
         {initial ? (

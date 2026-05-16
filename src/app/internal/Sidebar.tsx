@@ -165,6 +165,22 @@ export default function Sidebar() {
         </Link>
       </div>
 
+      {/* Tools — quick-launch */}
+      <nav className="py-2 border-b border-[#222]">
+        <div className="px-4 text-[10px] uppercase tracking-wider text-[#666] py-1.5">Tools</div>
+        <Link
+          href="/internal/whiteboards/scratch.excalidraw"
+          className={`text-[13px] flex items-center py-1.5 px-4 hover:bg-[#111] ${
+            pathname === '/internal/whiteboards/scratch.excalidraw'
+              ? 'text-white bg-[#111] border-l-2 border-klein'
+              : 'text-[#aaa]'
+          }`}
+        >
+          <span className="text-[#8b5cf6] mr-1.5 text-[10px]">◧</span>
+          Whiteboard (scratch)
+        </Link>
+      </nav>
+
       {/* Pinned brain docs */}
       <nav className="py-2 border-b border-[#222]">
         <div className="px-4 text-[10px] uppercase tracking-wider text-[#666] py-1.5">Project</div>
