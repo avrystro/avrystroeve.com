@@ -22,9 +22,37 @@ Four interrelated functions:
 - `assets/` — date templates, conversation prompts, anniversary milestones, gift trackers
 - `scripts/` — (later) anniversary reminder helper, date-rotation suggester
 
-## Migration pending (Phase 1.8)
+## Migration history
 
-Avry has existing material at `~/Developer/app.avry/life/my-wife/` including research and a field log. Phase 1.8 migrates that content into this agent's `references/`. Before execution, a read-only exploration pass produces a detailed file-by-file mapping for approval.
+Migrated 2026-05-16 (Phase 1.8) from `~/Developer/app.avry/life/my-wife/`. Old location deleted (clean cut). Content split as:
+
+- `my-wife.md` (17 KB) → `references/wife-profile.md`
+- `field-log.md` (7.5 KB) → `references/field-log.md`
+- `research/relationship-dynamics.md` (36 KB) → `references/relationship-dynamics.md`
+- `research/attraction-mastery.md` (37 KB) → `references/attraction-mastery.md`
+- Old `INDEX.md`, `HANDOFF.md`, `_archive/*` → discarded
+- Old `INDEX.md` backlog → lifted into this README (see below)
+
+Cross-refs to `life/<other>.md` files were rewritten as absolute paths to `~/Developer/app.avry/life/` (those files still live there until further migration).
+
+## Active backlog
+
+### Strategy execution
+- [ ] Optimize dating profile (Hinge + Tinder) — pictures, bio, prompts, Instagram handle
+- [ ] Optimize Instagram for social proof — story strategy, content mix, frequency
+- [ ] Define WhatsApp conversation flow (match → number → date/gathering)
+- [ ] Plan first gathering in Nosara (dinner + bonfire? size? venue?)
+- [ ] Build guest list system (names + Instagrams for gatherings)
+
+### Research + refinement
+- [ ] Research: height genetics (can taller children be influenced?)
+- [x] Develop strategy: WHERE and HOW to find her — 5 channels + funnel defined (Session 47)
+- [ ] Build filter system: quick identification of who's worth time vs who isn't
+- [ ] Continue adding past relationship learnings
+- [ ] Define non-negotiables vs nice-to-haves (refine after more sessions)
+
+### Linked voice memos (not yet migrated)
+- [2026-03-25 men-do-the-big-things-women-do-the-small-things](~/Developer/app.avry/conversations/voice-memos/inbox/2026-03-25-men-do-the-big-things-women-do-the-small-things.md) — Ilan + Avry on yin-yang, Mediterranean culture, Ilan's Miami crush. (Lives at old location since pre-dates Phase 1.5 sync repoint.)
 
 ## Adjacent agents
 
