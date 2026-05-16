@@ -67,10 +67,8 @@ avrystroeve.com/brain/
 │       └── SKILL.md, README.md, references/, assets/, scripts/
 │
 ├── homebase/                            ← multi-agent (NEW Phase 1.7)
-│   ├── README.md                        ← lists sub-agents
-│   ├── farmer/                          ← sub-agent (growing, soil, lunar timing, local climate)
-│   │   └── SKILL.md, README.md, references/, assets/, scripts/
-│   └── builder/                         ← sub-agent (construction, materials, sovereignty infrastructure)
+│   ├── README.md                        ← lists sub-agents (currently just farmer; builder etc. emerge later)
+│   └── farmer/                          ← sub-agent (growing, soil, lunar timing, local climate)
 │       └── SKILL.md, README.md, references/, assets/, scripts/
 │
 ├── family/                              ← multi-agent (NEW Phase 1.7)
@@ -79,8 +77,9 @@ avrystroeve.com/brain/
 │       └── SKILL.md, README.md, references/, assets/, scripts/
 │                                          (kids/ etc. added when they earn it)
 │
-├── service/                             ← single agent (NEW Phase 1.7 — scope TBD, see §5 row 14)
-│   ├── SKILL.md, README.md
+├── service/                             ← single agent (NEW Phase 1.7) — WORK AS SERVICE
+│   ├── SKILL.md                          consulting, Journey AI Group, agency work, client engagements
+│   ├── README.md
 │   └── references/, assets/, scripts/
 │
 ├── finances/                            ← single agent
@@ -244,19 +243,16 @@ Each phase is independently shippable. Each phase ends with a single git commit 
 
 ```
 brain/homebase/                    NEW
-├── README.md                       # what this domain covers
-├── farmer/                         # sub-agent
-│   ├── SKILL.md                    # growing, soil, lunar timing, Guanacaste/CR climate
-│   ├── README.md
-│   ├── references/                 # initial seed: herbalist convo lunar-farming distillation
-│   ├── assets/                     # raised-bed soil recipe template, planting calendar template
-│   └── scripts/
-└── builder/                        # sub-agent
-    ├── SKILL.md                    # construction, materials, sovereignty infrastructure (water, energy, off-grid)
+├── README.md                       # what this domain covers (farmer now; builder/etc. emerge later)
+└── farmer/                         # sub-agent — INITIAL ONLY
+    ├── SKILL.md                    # growing, soil, lunar timing, Guanacaste/CR climate
     ├── README.md
-    ├── references/
-    ├── assets/
+    ├── references/                 # initial seed: herbalist convo lunar-farming distillation
+    ├── assets/                     # raised-bed soil recipe template, planting calendar template
     └── scripts/
+
+# builder, water/well specialist, off-grid energy specialist, etc. emerge
+# when content earns them (Anthropic principle: don't pre-build empty agents).
 
 brain/family/                       NEW
 ├── README.md                       # multi-agent, currently just wife (kids/parents/etc. emerge later)
@@ -419,7 +415,7 @@ This is its own conversation. PLAN.md gets updated after that session.
 | 11 | Bulk-migrate historical conversations archive? | NO — defer indefinitely. `app.avry/conversations/` stays as frozen archive. Phase 1.5 only repoints going-forward writes. | If you ever want chat agents to access pre-Phase-1.5 history |
 | 12 | Use `INBOX_ROOT` env var across all sync programs? | YES if cheap — one env change vs editing 4 repos for future moves. Defer if Swift app makes it painful. | When making this kind of move again |
 | 13 | When does data leave `brain/` and enter a DB? | Files-in-repo for unstructured agent knowledge (markdown, voice memo binaries). DB (Postgres / Supabase) for structured + relational data only: chat history persistence (Phase 4+), contact / lead forms, anything multi-row queryable. Object storage (Vercel Blob / R2) for binaries when repo bloat hurts deploy. | Per new feature — ask "is this structured + queryable?" → DB. "Is this >50MB binary?" → object storage. "Else?" → file in brain. |
-| 14 | **What is the Service domain?** | UNDEFINED. Avry mentioned it but didn't expand. Possible interpretations: (a) service to community / giving back / contribution as a life pillar; (b) service businesses / work as service / customer-facing ops; (c) service workers (housekeeper, gardener, helpers as a network). Scaffold the folder in Phase 1.7 as a placeholder; define scope in a follow-up conversation before Phase 4 wiring. | Before adding real content to `service/references/`. |
+| 14 | **What is the Service domain?** | **DEFINED 2026-05-16: work as service.** Avry's consulting, Journey AI Group, agency-style client engagements. The agent helps him think about offers, pricing, client management, deliverables, sales conversations. Distinct from Finances (which tracks the money flow) and Family (which is private life). May overlap with venture-journey-ai-group's own brain — service agent lives in avrystroeve.com because the SHAPE of work-as-service crosses many ventures. | Closed. |
 | 15 | Cross-agent knowledge — duplicate or shared layer? | DUPLICATE the lens-specific framing into each agent's `references/`. The herbalist's lunar-farming knowledge lives in herbalist (the source) AND in farmer (the practitioner lens) — same facts, different framing. Per Anthropic's bounded-specialization principle: each agent owns its scope. No `brain/shared/` folder. | If duplication grows past ~3 cross-references per topic AND becomes unmaintainable. Then consider symlinks or a shared-layer experiment. |
 | 16 | How sub-agents emerge within a domain | Pattern: a domain starts with one agent. When a sub-specialization earns ≥10 files OR a named persona emerges (chef, trainer, herbalist, farmer, builder, wife), promote it to a sub-agent folder with its own SKILL.md. Don't pre-build sub-agents for hypothetical needs. | Each domain decides for itself when sub-folders become real agents. |
 
