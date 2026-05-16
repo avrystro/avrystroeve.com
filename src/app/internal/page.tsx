@@ -61,15 +61,18 @@ export default function InternalOverview() {
         <Stat label="LOG entries" value={logEntryCount} />
         <Stat label="PROJECT.md" value={project ? `${Math.round(project.bytes / 1024)}k` : '—'} />
         <Stat label="HANDOFF.md" value={handoff ? `${Math.round(handoff.bytes / 1024)}k` : '—'} />
-        <Stat label="Agents" value={5} />
+        <Stat label="Agents" value={8} />
       </div>
 
-      <Section title="Agents" link={{ href: '/internal/body', label: 'Body sub-agents →' }}>
+      <Section title="Agents">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
           <AgentCard href="/internal/god" name="God" subtitle="spiritual companion" />
           <AgentCard href="/internal/body/chef" name="Chef" subtitle="nutrition + cooking" />
           <AgentCard href="/internal/body/trainer" name="Trainer" subtitle="movement + recovery" />
           <AgentCard href="/internal/body/herbalist" name="Herbalist" subtitle="plant medicine" />
+          <AgentCard href="/internal/homebase/farmer" name="Farmer" subtitle="growing + soil + lunar timing" />
+          <AgentCard href="/internal/family/wife" name="Wife" subtitle="relationship + game + profile" />
+          <AgentCard href="/internal/service" name="Service" subtitle="consulting + offers + clients" />
           <AgentCard href="/internal/finances" name="Finances" subtitle="money + runway" />
         </div>
       </Section>

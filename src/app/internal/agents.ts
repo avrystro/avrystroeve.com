@@ -34,6 +34,21 @@ export const AGENTS: Agent[] = [
     scope: 'Herbal protocols, plant medicine, apothecary, materia medica.',
   },
   {
+    path: 'homebase/farmer',
+    name: 'Farmer',
+    scope: 'Growing, soil, lunar timing, local climate, Costa Rica biospheres.',
+  },
+  {
+    path: 'family/wife',
+    name: 'Wife',
+    scope: 'Relationship, game theory, dating psychology, wife profile, date planning.',
+  },
+  {
+    path: 'service',
+    name: 'Service',
+    scope: 'Consulting, JAG, agency work, client engagements, offers, pricing.',
+  },
+  {
     path: 'finances',
     name: 'Finances',
     scope: 'Accounts, runway, P&L, taxes, recurring subs.',

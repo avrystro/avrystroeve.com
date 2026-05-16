@@ -17,7 +17,7 @@ type Node = {
 type Tree = { root: string; children: Node[] }
 
 // Top-level brain sections, ordered as they appear in the sidebar
-const TOP_SECTIONS = ['god', 'body', 'finances', 'sources', 'whiteboards'] as const
+const TOP_SECTIONS = ['god', 'body', 'homebase', 'family', 'service', 'finances', 'sources', 'whiteboards'] as const
 
 // Pinned root-level brain docs (PROJECT.md, HANDOFF.md, LOG.md, PLAN.md)
 const PINNED_DOCS = [
@@ -111,7 +111,7 @@ export default function Sidebar() {
   const pathname = usePathname() ?? ''
   const [tree, setTree] = useState<Tree | null>(null)
   const [err, setErr] = useState<string | null>(null)
-  const [expanded, setExpanded] = useState<Set<string>>(new Set(['body', 'sources']))
+  const [expanded, setExpanded] = useState<Set<string>>(new Set(['body', 'homebase', 'family', 'sources']))
 
   useEffect(() => {
     fetch('/api/brain-tree', { cache: 'no-store' })
