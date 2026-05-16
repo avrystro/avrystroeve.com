@@ -1,5 +1,119 @@
 # avrystroeve.com - Log
 
+## 2026-05-15 → 2026-05-16
+
+**Session focus:** Admin dashboard built end-to-end. Transformed avrystroeve.com from "personal blog" into dual-surface product (public site + private personal-AI brain). 11 phases shipped across 4 repos.
+
+### Shipped
+
+**avrystroeve.com (12 commits):**
+
+| Commit | Phase | What |
+|---|---|---|
+| `f070f7c` | 0 | Cookie auth gate (`proxy.ts` + `/admin/login` + `/api/admin/auth`) |
+| `12cb58e` | 1 | Brain shell + sidebar + file viewer + scaffold (god/body{3}/finances/sources/whiteboards/) + migrated PROJECT/HANDOFF/LOG from app.avry |
+| `e44c59f` | 1.6 | Dropped inbox/ subfolder convention |
+| `93bf9a4` | 2 | ChatPanel placeholder (inert, just visible) |
+| `34607c2` | 3 | Excalidraw whiteboards (live save, co-located + freeform) |
+| `e358a5b` | 3+ | Whiteboard scratch pad + Save-as workflow + Tools sidebar entry |
+| `177890d` | 3 fix | Canvas paths skip file API (was 404 for missing scratch) |
+| `1328742` | 3+ | Herbalist whiteboard redesigned visually (cards/sticky-notes/kanban) + locked Phase 1.7 scope |
+| `250aee1` | 1.7 | Scaffolded Homebase/farmer + Family/wife + Service domains |
+| `e469d9d` | (interim) | Herbalist memo migrated + PLAN.md expanded with new domains |
+| `587dd11` | 1.8 | Migrated `app.avry/life/my-wife/` → `brain/family/wife/references/` (~98KB) |
+| `b9afbf9` | 4a | Chat wired via Vercel AI SDK + Anthropic Sonnet 4.6 + prompt caching |
+
+**Sync infrastructure repos (Phase 1.5/1.6, separate commits):**
+- `voice-memo-pipeline` / `~/Developer/scripts/` — process-voice-memo.sh + retitle/recover/audit + SyncVoiceMemos/main.swift now write to `brain/sources/voice-memos/`
+- `fathom-sync` (commit `e150ec4`) — sync.ts + enrich.ts + .env now point at `brain/sources/fathom-calls/`
+- `conversation-pipeline` (commit `b91a2ef`) — rebuild-people-indexes.sh reads from new location
+- `system/agents/conversations-directory` (commit `c3c80b2`/`dc039fe`) — routing agent docs repointed
+- `app.avry` (commit `9bbc271`) — `life/my-wife/` deleted (clean cut after migration)
+
+**Content moves + distillations:**
+- Herbalist memo (Catherine, sacredfarm.com, 41:32) moved from `app.avry/conversations/voice-memos/inbox/2026-05-13-cotton-and-polyester-concerns.{m4a,md}` (auto-titled wrong by classifier) → `brain/sources/voice-memos/2026-05-13-nosara-herbalist-conversation.{m4a,md}` with corrected name
+- First distillation whiteboard shipped: `brain/body/herbalist/references/2026-05-13-nosara-apothecary-conversation.excalidraw` — 3-column visual layout (Knowledge / Quotes / Actions) with color-coded topic cards, sticky-note quotes, kanban time-horizon action columns
+- Wife agent content seeded: 4 references migrated (wife-profile 17K + field-log 7.5K + relationship-dynamics 36K + attraction-mastery 37K = ~98K total)
+- Farmer agent knowledge seeded from Catherine's lunar farming + soil + Guanacaste climate content
+
+### Decisions made
+
+1. **Brain moves IN to avrystroeve.com repo** (was external at `app.avry/life/avrystroeve-website/`). Ships with Vercel deploy → chat works in prod from anywhere. Repo stays private.
+2. **Each agent follows Anthropic skill schema:** `SKILL.md` + `README.md` + `references/` + `assets/` + `scripts/`. References inform thinking (loaded into context); assets are output templates; scripts are deterministic.
+3. **8 agents shipped pre-content:** God (single) / Body{chef,trainer,herbalist} (multi) / Homebase{farmer} (multi, expanding) / Family{wife} (multi, expanding) / Service (single) / Finances (single, content deferred). Sub-agents emerge when content earns them.
+4. **Service domain = work as service** (consulting, Journey AI Group, agency, offers, pricing, sales). Distinct from Finances (money flow) and Family (private life).
+5. **Sources channel-typed (no inbox/ subfolder)** — `sources/<channel>/` IS the inbox. Two relationships: "where did this come from" (sources, by channel) + "which agent uses this" (references, per agent).
+6. **Cross-agent knowledge: duplicate** the lens-specific framing into each agent's references. No shared layer. Herbalist's lunar-farming knowledge lives in herbalist (source lens) AND farmer (practitioner lens).
+7. **Vercel AI SDK + Anthropic Sonnet 4.6 + prompt caching** as default agent stack. Provider-agnostic code (`src/lib/agent-tools/llm.ts`) supports Ollama swap via `LLM_PROVIDER` env var.
+8. **Files in repo for unstructured agent knowledge.** DB only for structured + queryable data (chat history persistence later). Object storage for binaries when they bloat the repo.
+9. **Visual whiteboards over text walls.** The Catherine distillation rebuilt twice — first as text columns, then redesigned with cards, sticky-notes, and kanban because Avry is a visual learner. This is the template for future distillations.
+10. **Forward-looking wife agent framing.** Originally scoped as "current relationship" — corrected after reading existing material that the my-wife pursuit is intentional / forward-looking, not current.
+
+### Subtractions
+
+- Deleted `~/Developer/app.avry/life/avrystroeve-website/` (3 files: old PROJECT/HANDOFF/LOG migrated into new in-repo brain)
+- Deleted `~/Developer/app.avry/life/my-wife/` (8 files migrated into new agent folder; old INDEX/HANDOFF/_archive discarded as superseded)
+- Dropped `brain/sources/<channel>/inbox/` subfolder layer (was always empty, added zero signal)
+- Stashed (not deleted): pre-existing WIP at `avrystroeve.com` for homepage redesign + ocean palette + AGENTS.md (saved as `wip: homepage redesign + ocean palette + AGENTS.md`)
+
+### Gotchas surfaced
+
+- **Ad-hoc Swift signing breaks FDA every rebuild.** macOS Full Disk Access tracks ad-hoc-signed binaries by HASH. Every `./build.sh` produces a new hash → FDA grant is technically still listed but doesn't apply. Fix this session: remove + re-add via System Settings each rebuild. Long-term fix: stable signing identity (deferred).
+- **Next.js doesn't allow literal segments after catch-all routes.** Initially tried `src/app/api/agent/[...path]/chat/route.ts` — invalid because `chat` appears after `[...path]`. Restructured to single `/api/agent/chat` endpoint with `agentPath` in POST body.
+- **`convertToModelMessages` in AI SDK v6 returns a Promise.** Needed `await` before spreading into messages array. Caught by TypeScript on second build attempt.
+- **AI auto-titler can mis-title voice memos.** The 41-min Catherine herbalist conversation got auto-titled "cotton-and-polyester-concerns" because the OPENING topic was cotton vs polyester fabric. Bulk of content was herbalist material. Manually corrected filename during migration.
+- **`/internal/whiteboards/scratch.excalidraw` initially 404'd** because file viewer called the file API first, which 404s for non-existent files. Canvas API handles missing files (returns empty scene). Fix: skip file API for `.excalidraw` paths, render CanvasView directly.
+- **Anthropic API key pasted in chat** during this session. Standard hygiene: rotate before sharing repo.
+
+### Files created
+
+Code:
+- `src/proxy.ts`, `src/app/admin/login/page.tsx`, `src/app/api/admin/auth/route.ts`
+- `src/app/internal/{layout,Sidebar,FileView,ChatPanel,page,agents}.tsx,.ts`
+- `src/app/internal/[...path]/page.tsx`
+- `src/app/api/{brain-tree,file/[...path],canvas/[...path],agent/chat}/route.ts`
+- `src/lib/agent-tools/{llm,load-agent}.ts`
+- `AGENTS.md` (replaces deleted `CLAUDE.md`, symlinked back)
+
+Brain content:
+- `brain/README.md`, `brain/PLAN.md`
+- `brain/sources/README.md` + 9 channel folders
+- `brain/god/{SKILL,README}.md` + folders
+- `brain/body/{README.md, chef/{SKILL,README}.md+folders, trainer/{SKILL,README}.md+folders, herbalist/{SKILL,README}.md+folders}`
+- `brain/homebase/{README.md, farmer/{SKILL,README}.md+folders}`
+- `brain/family/{README.md, wife/{SKILL,README}.md+folders}`
+- `brain/service/{SKILL,README}.md` + folders
+- `brain/finances/{SKILL,README}.md` + folders
+- `brain/whiteboards/README.md`
+- `brain/sources/voice-memos/2026-05-13-nosara-herbalist-conversation.{m4a,md}`
+- `brain/body/herbalist/references/2026-05-13-nosara-apothecary-conversation.excalidraw`
+- `brain/family/wife/references/{wife-profile,field-log,relationship-dynamics,attraction-mastery}.md`
+
+### Files modified
+
+Across 4 repos (see commit list above).
+
+### Files deleted
+
+- `~/Developer/app.avry/life/avrystroeve-website/` (whole dir)
+- `~/Developer/app.avry/life/my-wife/` (whole dir)
+- `brain/sources/<channel>/inbox/` (9 subfolders + .gitkeeps — replaced with channel-root .gitkeeps)
+
+### Verification
+
+- Builds clean (`npm run build` green for all phases)
+- Sync verified working post-FDA-re-grant (sync log shows successful "Sync complete" entries 2026-05-16)
+- Herbalist memo confirmed in new location with corrected name + content
+- Build green at session end with Phase 4a chat route registered (`/api/agent/chat`)
+
+### NOT verified
+
+- **End-to-end chat in browser.** TypeScript compiles, route exists, useChat is wired — but neither I nor Avry clicked Send on the actual ChatPanel and saw a streaming response. First action next session.
+- **Prompt caching firing correctly.** Should show `cache_read_input_tokens` > 0 on second call within 5 min. Untested.
+- **Vercel production chat.** Env vars not yet added to Vercel project settings.
+
+---
+
 ## April 17-18, 2026
 
 **Session focus:** Vision page design + life manifesto rewrite

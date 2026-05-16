@@ -1,6 +1,87 @@
 # avrystroeve.com - Handoff
 
-## Last Session: May 13, 2026 (TIMELINE canonicalization + bio source + website content-source wiring)
+## Last Session: 2026-05-15 → 2026-05-16 (Admin dashboard built end-to-end — Phases 0 through 4a)
+
+### What Happened
+
+Massive multi-day build session. Transformed avrystroeve.com from "personal blog" into a dual-surface product with a private personal-AI brain. Shipped 11 phases across 3 repos.
+
+**Phases shipped (all in `brain/PLAN.md`):**
+
+- **Phase 0 (commit f070f7c)** — Cookie auth gate: `src/proxy.ts` + `/admin/login` + `/api/admin/auth`. Single `ADMIN_PASSWORD` env protects `/admin/*`, `/internal/*`, and brain APIs. 7-day cookie.
+- **Phase 1 (12cb58e)** — Brain shell + sidebar + file viewer. Scaffolded full brain tree (god/, body/{chef,trainer,herbalist}/, finances/, sources/, whiteboards/) with READMEs + SKILL.md skeletons. Migrated PROJECT/HANDOFF/LOG from old location (`app.avry/life/avrystroeve-website/` — DELETED). `/internal` overview page, sidebar mirroring brain tree, catch-all file renderer with markdown + directory listing.
+- **Phase 1.5 (4 separate commits across 4 repos)** — Sync infrastructure repointed:
+  - voice-memo-pipeline (`~/Developer/scripts/`) → writes to `brain/sources/voice-memos/`
+  - fathom-sync → writes to `brain/sources/fathom-calls/`
+  - conversation-pipeline → reads from `brain/sources/`
+  - system/agents/conversations-directory → routes from new central inbox
+  - Historical archive at `~/Developer/app.avry/conversations/` stays frozen
+  - Required Swift rebuild + FDA re-grant (took 2 tries because ad-hoc signing changes hash on rebuild)
+- **Phase 1.6 (e44c59f)** — Dropped `/inbox` subfolder convention. `sources/<channel>/` IS the inbox now. Cleaner. Required updating sync scripts again + Swift rebuild + FDA re-grant.
+- **Phase 1.7 (250aee1)** — Scaffolded 3 new top-level domains: Homebase (farmer), Family (wife), Service. Each with proper SKILL.md + README + references/assets/scripts. Sidebar TOP_SECTIONS updated. agents.ts registry updated.
+- **Phase 1.8 (587dd11 + 9bbc271 in app.avry)** — Migrated `app.avry/life/my-wife/` → `brain/family/wife/references/` (~98KB across 4 files: wife-profile, field-log, relationship-dynamics, attraction-mastery). Cross-refs rewritten. Old location deleted (clean cut). Wife agent SKILL.md refined to forward-looking pursuit framing.
+- **Phase 2 (93bf9a4)** — ChatPanel placeholder. Right-side panel mounting on every agent route.
+- **Phase 3 (34607c2 + e358a5b + 177890d)** — Excalidraw whiteboards. `.excalidraw` files render as live editable canvas with autosave. Top-level "Whiteboard (scratch)" quick-launch in sidebar. "Save as new whiteboard" workflow on scratch. `+ New canvas` button on every directory view.
+- **Phase 4a (b9afbf9)** — Chat wired up. Vercel AI SDK + Anthropic Sonnet 4.6 with prompt caching. `/api/agent/chat` POST endpoint, ChatPanel uses `useChat` hook. Agents read SKILL.md + all references/ files, stream responses. Provider-agnostic via `src/lib/agent-tools/llm.ts` — Anthropic default, Ollama swap via env var.
+
+**Bonus deliverable:** First real synthesis whiteboard at `brain/body/herbalist/references/2026-05-13-nosara-apothecary-conversation.excalidraw`. 41:32 conversation with Catherine (sacredfarm.com) distilled into 3 visual columns (Knowledge / Quotes / Actions) with 8 color-coded topic cards, 8 sticky-note quotes, 13 action cards across 4 time-horizon columns. Cross-agent routing notes for chef/trainer/farmer/god.
+
+### State at session end
+
+**Working:**
+- All 8 agents talkable via `/internal/<agent-path>` ChatPanel.
+- Wife agent has ~98KB of context (her 4 references).
+- Herbalist agent has Catherine memo + distillation whiteboard.
+- Farmer agent has lunar/soil/Guanacaste knowledge seeded from Catherine conversation.
+- Other agents have SKILL.md prompts but empty references — they'll respond from system prompt alone.
+- Local dev: `npm run dev` + sign in at `/admin/login` (password in `.env.local`) + chat away.
+
+**Not yet working / pending:**
+- Vercel production chat — needs env vars added to Vercel project settings (`ADMIN_PASSWORD`, `ANTHROPIC_API_KEY`, `LLM_PROVIDER=anthropic`, `ANTHROPIC_MODEL=claude-sonnet-4-6`).
+- Browser-level verification of Phase 4a — TypeScript compiles and route is wired but neither Avry nor I clicked Send on the actual ChatPanel to confirm end-to-end streaming works. **First action next session.**
+- Agents can READ files but can't WRITE back yet (Phase 4b — filesystem tools like appendToFieldLog).
+- No calendar tool yet (Phase 4c — Google Calendar via OAuth + googleapis).
+- Finances agent has no content yet (Phase 5 — Plaid + accounts).
+
+**Anthropic API key:** pasted in-chat during this session — should be rotated for hygiene before sharing repo.
+
+**The Swift binary FDA needs re-granting every rebuild** because the build uses ad-hoc signing. Proper fix is a stable signing identity; for now, re-toggle in System Settings → Full Disk Access whenever the binary is rebuilt.
+
+### Decisions made this session
+
+(Captured in detail in PROJECT.md Key Decisions table + brain/PLAN.md §5 open-decisions table)
+
+- Brain moves INTO avrystroeve.com repo (was external, now internal). Ships with Vercel deploy. Repo stays private.
+- Each agent follows Anthropic skill schema: SKILL.md + README.md + references/ + assets/ + scripts/. References load into context; assets are output templates; scripts are deterministic actions.
+- 8 agents shipped pre-content: God / Body{chef,trainer,herbalist} / Homebase{farmer} / Family{wife} / Service / Finances. New sub-agents emerge when content earns them, never pre-built.
+- Service domain = work as service (consulting, JAG, agency, offers, pricing).
+- Sources channel-typed (voice-memos, fathom-calls, etc.); references per-agent. No inbox/ subfolder layer.
+- Cross-agent knowledge: duplicate the lens-specific framing into each agent's references — don't build a shared layer.
+- Anthropic Sonnet 4.6 + prompt caching as default agent model. Provider-agnostic code allows local llama / Gemini swap later.
+- Files-in-repo for unstructured agent knowledge. DB only for structured + queryable data (chat history persistence Phase 4+). Object storage for binaries when they bloat the repo (later).
+
+### Next Session — Top Priority Actions
+
+**Pick up here in order:**
+
+1. **Browser test Phase 4a end-to-end.** Start dev server, sign in, visit `/internal/family/wife`, type "Tell me what you know about her, draw from my profile." Verify streaming works, response is grounded in references. If broken: debug (likely candidates — Anthropic API version mismatch, providerOptions key syntax, useChat v6 message format).
+2. **Test prompt caching is actually firing.** Hit any agent twice in <5 min, check Anthropic console / response headers for `cache_read_input_tokens` > 0. Confirm cost reduction.
+3. **Push to production.** Add env vars in Vercel project (`ADMIN_PASSWORD`, `ANTHROPIC_API_KEY`, `LLM_PROVIDER=anthropic`, `ANTHROPIC_MODEL=claude-sonnet-4-6`). `git push`. Visit prod URL, sign in, chat with wife agent from phone.
+4. **Execute Phase 4b — filesystem write tools.** Build `appendToFieldLog`, `editWifeProfile`, `createDatePlan`, generic `editBrainFile`. Register in `src/lib/agent-tools/`. Update SKILL.md tools arrays. Now agents can modify the brain during conversation.
+5. **Execute Phase 4c — Google Calendar tool.** Google Cloud project + OAuth2 flow + `googleapis` npm + `src/lib/agent-tools/calendar.ts`. Wife agent can schedule dates. Service agent can book meetings.
+
+### Open Threads (deferred but not forgotten)
+
+- **Phase 5 — Financial agent content scoping.** Separate session needed: what files in `finances/references/`, Plaid integration, runway model, tax docs, recurring subs. Touches `~/Developer/plaid-quickstart` codebase.
+- **Local model (Ollama) tunneling.** If Avry wants free + private chat from phone, set up cloudflared tunnel from his Mac's ollama. Defer until current Sonnet costs prove worth replacing.
+- **Visual file browser.** Avry mentioned wanting a more visual way to organize files (not just text tree). Excalidraw whiteboards partially solve this; full custom widget is Phase 6+.
+- **Schema files migration.** `app.avry/conversations/voice-memos/SCHEMA.md` and `vocabulary.md` still live at old location. Routing agent docs reference them. Migrate eventually or update refs.
+- **Historical conversations archive bulk-migrate.** 5+ years at `app.avry/conversations/` frozen indefinitely. Migration deferred forever unless agents need pre-2026-05-15 history.
+- **Rotate Anthropic API key.** Pasted in chat this session. Standard hygiene before sharing repo.
+
+---
+
+## Previous Session: May 13, 2026 (TIMELINE canonicalization + bio source + website content-source wiring)
 
 ### What Happened
 

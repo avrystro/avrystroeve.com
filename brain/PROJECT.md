@@ -1,18 +1,49 @@
-# avrystroeve.com — Community Education Platform
+# avrystroeve.com — Personal AI Brain + Community Education Platform
 
 ## What This Is
 
-A custom-built community and education platform at avrystroeve.com where people pay to access Avry's knowledge, frameworks, and community around spirituality, self-education, and AI tools. This is the public-facing product of app.avry — the "art piece" that funnels all social media channels into one owned destination. Not Skool, not Whop — a custom platform that becomes anything (AI assistant, app store distribution, marketplace) over time.
+avrystroeve.com is a dual-surface product:
 
-## Brain / Body Split
+1. **Front (public):** Personal brand site, blog, vision scroll, deep pages with AI chat per life domain, eventually a paid community + education platform. The "art piece" that funnels all social channels into one owned destination. Not Skool, not Whop — custom-built, fully owned.
+2. **Back (private, gated):** Admin dashboard at `/internal/*` containing Avry's personal AI brain — 8 specialist agents (God, Body chef/trainer/herbalist, Homebase farmer, Family wife, Service, Finances), each with their own SKILL.md + knowledge base, all chattable via streaming Claude API.
 
-- **Brain:** `app.avry/life/avrystroeve-website/` (this directory)
-- **Body:** `~/Developer/avrystroeve.com/` (Next.js code repo)
-- **Content source:** `app.avry/life/` (VISION.md, places/, health/, research/, etc.)
+Both surfaces share the same Next.js codebase and brain folder. The admin dashboard is operational TODAY (Phase 4a shipped 2026-05-16). The public-facing community platform features below remain the long-term vision.
+
+## Current State (2026-05-16) — Admin Dashboard + Brain ✅ OPERATIONAL
+
+**Built and working:**
+- Cookie-based auth gate (`ADMIN_PASSWORD`) protecting `/admin/*` + `/internal/*` + all brain APIs
+- Sidebar mirroring full brain filesystem at `/internal`
+- Markdown file viewer, directory browser, Excalidraw whiteboard editor (live save)
+- "Whiteboard (scratch)" quick-launch + "Save as new" workflow
+- 8 specialist agents scaffolded with real SKILL.md + references:
+  - **God** (single agent) — spiritual companion
+  - **Body** — Chef, Trainer, Herbalist (multi-agent)
+  - **Homebase** — Farmer (multi-agent, expanding)
+  - **Family** — Wife (multi-agent, expanding)
+  - **Service** — single agent (work as service: consulting, JAG)
+  - **Finances** — single agent (content scoping deferred to Phase 5)
+- Chat wired up via Vercel AI SDK + Anthropic (Sonnet 4.6 default) with prompt caching enabled — 90% off on cache hits
+- Sync infrastructure (voice-memo-pipeline, fathom-sync, conversation-pipeline, conversations-directory routing agent) repointed to write captures into `brain/sources/`
+- First real distillation shipped: 41-min herbalist conversation with Catherine (sacredfarm.com) → herbalist whiteboard + farmer agent knowledge seeded
+- Wife agent has ~98KB of migrated content (wife-profile + field-log + relationship-dynamics + attraction-mastery) ready for chat
+
+**Architecture:** see `brain/PLAN.md` for the full phased plan (Phases 0–5). All phases 0, 1, 1.5, 1.6, 1.7, 1.8, 2, 3, 4a shipped. Phases 4b (filesystem write tools), 4c (Google Calendar), 5 (financial content scoping) pending.
+
+## Brain / Body Split (UPDATED 2026-05-16)
+
+**Previous (April–May 13):** Brain lived OUTSIDE the website code repo at `~/Developer/app.avry/life/avrystroeve-website/`. Three small markdown files (PROJECT/HANDOFF/LOG). Body was the Next.js repo.
+
+**Current:** Brain lives INSIDE the repo at `~/Developer/avrystroeve.com/brain/`. Ships with Vercel deploy. Agents read from it at chat time. The repo IS the single source of truth — code + brain + content together. The repo MUST stay private (contains personal data, agent profiles, financial info eventually).
+
+Content source: still `~/Developer/app.avry/life/` for material not yet migrated (VISION.md, TIMELINE.md, places/, etc.). Migration is progressive per Avry's preference — only move material when it has a clear home in the new brain.
 
 ## Core Value
 
-People can pay and access gated content, courses, and community at avrystroeve.com — on Avry's domain, with Avry's brand, building Avry's SEO equity.
+Two layers:
+
+1. **Avry's personal use (operational TODAY):** A private admin dashboard giving him 8 specialist AI agents he can talk to from anywhere — about his body, his wife pursuit, his finances, his spiritual life, his work, his growing/homebase plans. Files captured by voice memo, fathom call, and other sources land in the brain automatically and inform the agents.
+2. **Public-facing (long-term vision below):** People pay to access gated content, courses, and community — on Avry's domain, with Avry's brand, building Avry's SEO equity. The deep-page chat experience for the public site reuses the same agent infrastructure proven by the admin dashboard.
 
 ## Features
 
@@ -89,9 +120,23 @@ Authentication, payments, gated content, member profiles, community feed. Full s
 - ✓ PostHog analytics integration — existing
 - ✓ Component library started (button, CTA card) — existing
 - ✓ Blog components (post layout, hero, media player, album collection) — existing
+- ✓ Cookie-based auth gate via `src/proxy.ts` (Phase 0, shipped 2026-05-15)
+- ✓ Brain folder structure with 8 agent SKILL.md definitions (Phase 1 + 1.7, shipped 2026-05-15/16)
+- ✓ Sidebar + file viewer + Excalidraw whiteboard editor (Phase 1 + 3, shipped 2026-05-16)
+- ✓ Sync infrastructure repointed (voice-memo-pipeline, fathom-sync, conversation-pipeline, conversations-directory) into `brain/sources/` (Phase 1.5/1.6, shipped 2026-05-16)
+- ✓ my-wife/ content migrated from app.avry into family/wife/references/ (Phase 1.8, shipped 2026-05-16)
+- ✓ Chat wired via Vercel AI SDK + Anthropic Sonnet 4.6 with prompt caching (Phase 4a, shipped 2026-05-16)
+- ✓ Provider-agnostic LLM layer (`src/lib/agent-tools/llm.ts`) supporting Anthropic + Ollama via env var swap
 
 ### Active
 
+**Admin dashboard (immediate next):**
+- [ ] Phase 4b — filesystem write tools for agents (appendToFieldLog, editWifeProfile, createDatePlan, etc.) so agents can modify brain during conversation
+- [ ] Phase 4c — Google Calendar tool (OAuth + native TypeScript via googleapis) so wife agent can schedule dates, service agent can book client meetings
+- [ ] Phase 5 — financial agent content scoping (accounts, Plaid integration, runway, taxes)
+- [ ] Vercel env vars: add `ADMIN_PASSWORD`, `ANTHROPIC_API_KEY`, `LLM_PROVIDER=anthropic`, `ANTHROPIC_MODEL=claude-sonnet-4-6` to Vercel project settings for production chat access
+
+**Public-facing platform (carried from earlier vision):**
 - [ ] Vision scroll page (Layer 1)
 - [ ] Bot protection for /vision (robots.txt, meta robots, X-Robots-Tag)
 - [ ] Password gate for /vision
@@ -105,6 +150,11 @@ Authentication, payments, gated content, member profiles, community feed. Full s
 - [ ] Email capture and list building
 - [ ] Public landing page / marketing pages with SEO
 - [ ] Mobile-responsive PWA experience
+- [ ] /timeline page consuming `src/content/TIMELINE.md` (Songlines-inspired visual)
+- [ ] /about page consuming `~/Developer/app.avry/life/bio.md`
+
+**Brain content migration (progressive, per-conversation pace):**
+- [ ] Other `app.avry/life/` content gradually migrating into brain/ when it has a clear agent home (body/, places/, ancient-wisdom/, material/, etc.)
 
 ### Out of Scope (for now)
 
@@ -220,8 +270,13 @@ These must be answered BEFORE building community features:
 | No gamification | Intentional rejection of Skool's dopamine model. Spiritual depth > engagement hacks. | Decided |
 | Content stays in markdown in app.avry | Portability. Platform is delivery layer. Source of truth is the repo. | Decided |
 | $29/mo entry tier | Low friction for trust-dependent niche. Raise later. Need only 4 members to cover costs. | Decided |
-| Brain lives in life/avrystroeve-website/ | Website is an extension of life/. Content sources and brain are the same directory tree. | Decided |
-| Vision scroll as first new feature | Daily personal use, no auth/payments needed, proves the content-to-website pipeline | Decided |
+| Brain lives in life/avrystroeve-website/ | Website is an extension of life/. Content sources and brain are the same directory tree. | SUPERSEDED 2026-05-15 |
+| Vision scroll as first new feature | Daily personal use, no auth/payments needed, proves the content-to-website pipeline | Decided (carried) |
+| Brain moves IN to avrystroeve.com repo | Ships with Vercel deploy → chat agents work from anywhere. Repo stays private (contains personal data). Single source of truth: code + brain + content together. | Decided 2026-05-15 |
+| Use Anthropic Sonnet 4.6 + prompt caching as default agent model | Best quality/cost ratio for long-context chat with reference files. Caching cuts cost 75%+ on sustained conversations. Provider-agnostic code allows local llama / Gemini swap later. | Decided 2026-05-16 |
+| 8 agents shipped pre-content: God / Body{chef,trainer,herbalist} / Homebase{farmer} / Family{wife} / Service / Finances | Bounded specialization per Anthropic principles. Each agent has its own SKILL.md + references/. New sub-agents emerge when content earns them. | Decided 2026-05-15/16 |
+| Use channel-typed `sources/` (no inbox/ subfolder); `references/` per agent | Two relationships: "where did this come from" (sources, by channel) + "which agent uses this" (references, per agent). Inbox subfolder dropped because root was always empty. | Decided 2026-05-16 |
+| Service domain = work as service (consulting, JAG, agency, offers, pricing) | Scope locked. Distinct from Finances (money flow) and Family (private life). Cross-cuts ventures. | Decided 2026-05-16 |
 
 ---
-*Last updated: 2026-05-13 — TIMELINE.md + bio.md sources established; /timeline and /about pages now have content sources awaiting page implementation*
+*Last updated: 2026-05-16 — admin dashboard operational (Phases 0–4a shipped); 8 agents chattable via Anthropic Sonnet 4.6 with prompt caching; herbalist + farmer + wife agents have real content; sync infrastructure repointed; my-wife/ migrated. Vision scroll + community platform features remain the long-term horizon.*
