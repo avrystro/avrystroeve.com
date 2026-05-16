@@ -1,0 +1,44 @@
+{
+  "type": "excalidraw",
+  "version": 2,
+  "source": "avrystroeve.com-internal",
+  "elements": [
+    {
+      "id": "gCA8t_lQPq2hNM305v3Lw",
+      "type": "rectangle",
+      "x": 430.828125,
+      "y": 284.28515625,
+      "width": 305.69921875,
+      "height": 102.12109375,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "index": "a0",
+      "roundness": {
+        "type": 3
+      },
+      "seed": 701585737,
+      "version": 48,
+      "versionNonce": 2004817607,
+      "isDeleted": true,
+      "boundElements": null,
+      "updated": 1778911347894,
+      "link": null,
+      "locked": false
+    }
+  ],
+  "appState": {
+    "viewBackgroundColor": "#ffffff",
+    "gridModeEnabled": false,
+    "gridSize": 20,
+    "theme": "light"
+  },
+  "files": {}
+}
