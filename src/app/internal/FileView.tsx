@@ -385,10 +385,16 @@ function CanvasView({ segments }: { segments: string[] }) {
 
 export default function FileView({ segments }: { segments: string[] }) {
   const pathStr = segments.join('/')
+  const last = segments[segments.length - 1] ?? ''
+  const isCanvas = last.endsWith('.excalidraw')
   const [payload, setPayload] = useState<FilePayload | null>(null)
   const [err, setErr] = useState<string | null>(null)
 
   useEffect(() => {
+    // Canvases skip the file API entirely — CanvasView handles loading directly
+    // via /api/canvas (which create-on-read for missing files).
+    if (isCanvas) return
+
     setPayload(null)
     setErr(null)
     fetch(`/api/file/${pathStr}`, { cache: 'no-store' })
@@ -399,7 +405,22 @@ export default function FileView({ segments }: { segments: string[] }) {
       })
       .then(setPayload)
       .catch((e) => setErr(String(e)))
-  }, [pathStr])
+  }, [pathStr, isCanvas])
+
+  // Canvas: full-bleed, no padding, takes all available vertical space.
+  // Render immediately without waiting on file API (which 404s for missing scratch files).
+  if (isCanvas) {
+    return (
+      <div className="flex flex-col h-screen">
+        <div className="px-6 py-3 border-b border-[#222] bg-[#0a0a0a]">
+          <Breadcrumb segments={segments} />
+        </div>
+        <div className="flex-1 min-h-0">
+          <CanvasView segments={segments} />
+        </div>
+      </div>
+    )
+  }
 
   if (err) {
     return (
@@ -413,20 +434,6 @@ export default function FileView({ segments }: { segments: string[] }) {
     return <div className="p-8 text-sm text-[#888]">loading {pathStr}…</div>
   }
 
-  // Canvas: full-bleed, no padding, takes all available vertical space.
-  if ('kind' in payload && payload.kind === 'excalidraw') {
-    return (
-      <div className="flex flex-col h-screen">
-        <div className="px-6 py-3 border-b border-[#222] bg-[#0a0a0a]">
-          <Breadcrumb segments={segments} />
-        </div>
-        <div className="flex-1 min-h-0">
-          <CanvasView segments={segments} />
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="px-6 py-6">
       <div className="mb-6">
@@ -436,6 +443,7 @@ export default function FileView({ segments }: { segments: string[] }) {
         <DirectoryView payload={payload} basePath={`/internal/${pathStr}`} dirPath={pathStr} />
       )}
       {'kind' in payload && payload.kind === 'markdown' && <MarkdownView payload={payload} />}
+      {'kind' in payload && payload.kind === 'excalidraw' && null /* handled above via isCanvas */}
       {'kind' in payload && payload.kind === 'json' && (
         <pre className="text-xs text-[#aaa] bg-[#0a0a0a] border border-[#222] rounded-lg p-4 overflow-x-auto">
           {payload.raw}
