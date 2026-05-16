@@ -33,7 +33,7 @@ Turn `avrystroeve.com` into the single source of truth for everything about Avry
 
 ---
 
-## 3. The full brain tree (target end-state of Phase 1)
+## 3. The full brain tree (target end-state — updated 2026-05-16)
 
 ```
 avrystroeve.com/brain/
@@ -41,7 +41,7 @@ avrystroeve.com/brain/
 ├── PROJECT.md, HANDOFF.md, LOG.md      ← website project mgmt
 ├── PLAN.md                              ← this file
 │
-├── sources/                             ← RAW captures, typed by channel (mirrors existing app.avry/conversations/ taxonomy)
+├── sources/                             ← RAW captures, typed by channel (no inbox/ subfolder — channel root IS the inbox)
 │   ├── README.md
 │   ├── voice-memos/                     ← from voice-memo-pipeline (Mac dictations)
 │   ├── fathom-calls/                    ← from fathom-sync
@@ -49,35 +49,49 @@ avrystroeve.com/brain/
 │   ├── chat-sessions/                   ← Claude / AI chat brain-dumps
 │   ├── session-dumps/                   ← whole-session captures
 │   ├── research/                        ← book notes, papers, video transcripts
-│   ├── whatsapp/                        ← (new bucket, no existing data)
-│   ├── telegram/                        ← (new bucket, no existing data)
-│   └── in-person/                       ← (new bucket, no existing data)
+│   ├── whatsapp/                        ← (new bucket)
+│   ├── telegram/                        ← (new bucket)
+│   └── in-person/                       ← (new bucket)
 │
 ├── god/                                 ← single agent
 │   ├── SKILL.md, README.md
-│   ├── references/
-│   ├── assets/
-│   └── scripts/
+│   └── references/, assets/, scripts/
 │
 ├── body/                                ← multi-agent
-│   ├── README.md                        ← body domain overview (lists sub-agents)
-│   ├── chef/                            ← sub-agent
-│   │   ├── SKILL.md, README.md
-│   │   ├── references/, assets/, scripts/
-│   ├── trainer/
-│   │   ├── SKILL.md, README.md
-│   │   ├── references/, assets/, scripts/
-│   └── herbalist/
-│       ├── SKILL.md, README.md
-│       ├── references/, assets/, scripts/
+│   ├── README.md                        ← lists sub-agents
+│   ├── chef/                            ← sub-agent (nutrition, recipes, cooking)
+│   │   └── SKILL.md, README.md, references/, assets/, scripts/
+│   ├── trainer/                         ← sub-agent (movement, recovery, biomarkers)
+│   │   └── SKILL.md, README.md, references/, assets/, scripts/
+│   └── herbalist/                       ← sub-agent (plant medicine, protocols)
+│       └── SKILL.md, README.md, references/, assets/, scripts/
+│
+├── homebase/                            ← multi-agent (NEW Phase 1.7)
+│   ├── README.md                        ← lists sub-agents
+│   ├── farmer/                          ← sub-agent (growing, soil, lunar timing, local climate)
+│   │   └── SKILL.md, README.md, references/, assets/, scripts/
+│   └── builder/                         ← sub-agent (construction, materials, sovereignty infrastructure)
+│       └── SKILL.md, README.md, references/, assets/, scripts/
+│
+├── family/                              ← multi-agent (NEW Phase 1.7)
+│   ├── README.md                        ← lists sub-agents
+│   └── wife/                            ← sub-agent (relationship, game, dating psych, profile of his wife)
+│       └── SKILL.md, README.md, references/, assets/, scripts/
+│                                          (kids/ etc. added when they earn it)
+│
+├── service/                             ← single agent (NEW Phase 1.7 — scope TBD, see §5 row 14)
+│   ├── SKILL.md, README.md
+│   └── references/, assets/, scripts/
 │
 ├── finances/                            ← single agent
 │   ├── SKILL.md, README.md
-│   ├── references/, assets/, scripts/
+│   └── references/, assets/, scripts/
 │
-└── whiteboards/                         ← free-form excalidraw canvases
+└── whiteboards/                         ← free-form excalidraw canvases (cross-cutting; co-located canvases live inside agent references/ instead)
     └── README.md
 ```
+
+**Cross-agent knowledge note:** the herbalist conversation with Catherine (2026-05-13) surfaced material relevant to chef (eat-the-rainbow, gum thickeners), trainer (liver as recovery signal), farmer (lunar timing, soil, Guanacaste climate), and god (indigenous wisdom). Per Anthropic's bounded-specialization principle, duplicate the lens-specific framing into each agent's `references/` rather than building a shared layer. Each agent owns its scope.
 
 ---
 
@@ -212,6 +226,98 @@ Each phase is independently shippable. Each phase ends with a single git commit 
 
 ---
 
+### Phase 1.6 — Drop inbox/ subfolder convention (SHIPPED 2026-05-16)
+
+**Goal:** `sources/<channel>/` IS the inbox. No `inbox/` subfolder layer. Earlier two-tier (inbox vs root) was always empty at root because "triaged" actually means "copied to an agent's `references/`," not "moved out of inbox/."
+
+**Changes:** dropped `/inbox` from all sync scripts (process-voice-memo, retitle, recover, audit, SyncVoiceMemos Swift), fathom-sync sync.ts + enrich.ts (OUTPUT_DIR = CALLS_DIR), conversation-pipeline CONV_DIRS, conversations-directory docs. Deleted `brain/sources/<channel>/inbox/` subfolders.
+
+**Historical archive at `app.avry/conversations/`** still uses inbox/ shape — frozen, untouched. Asymmetry is intentional.
+
+---
+
+### Phase 1.7 — Expand domain structure (Homebase, Family, Service)
+
+**Goal:** scaffold three new top-level domains using the same shape as god/body/finances. Each domain folder gets README + sub-agent folders (or single SKILL.md if single-agent). Sidebar auto-discovers new domains on next page load — no code change needed (sidebar TOP_SECTIONS array needs one edit to include the new top-level names).
+
+**Files to scaffold:**
+
+```
+brain/homebase/                    NEW
+├── README.md                       # what this domain covers
+├── farmer/                         # sub-agent
+│   ├── SKILL.md                    # growing, soil, lunar timing, Guanacaste/CR climate
+│   ├── README.md
+│   ├── references/                 # initial seed: herbalist convo lunar-farming distillation
+│   ├── assets/                     # raised-bed soil recipe template, planting calendar template
+│   └── scripts/
+└── builder/                        # sub-agent
+    ├── SKILL.md                    # construction, materials, sovereignty infrastructure (water, energy, off-grid)
+    ├── README.md
+    ├── references/
+    ├── assets/
+    └── scripts/
+
+brain/family/                       NEW
+├── README.md                       # multi-agent, currently just wife (kids/parents/etc. emerge later)
+└── wife/                           # sub-agent
+    ├── SKILL.md                    # relationship, game principles, dating psychology, mother-of-children criteria
+    ├── README.md
+    ├── references/                 # WILL be populated by Phase 1.8 migration of app.avry/life/my-wife/
+    ├── assets/                     # date templates, conversation prompts, anniversary calendar
+    └── scripts/
+
+brain/service/                      NEW (scope TBD — see §5 row 14)
+├── SKILL.md                        # single agent, scope to be defined
+├── README.md
+├── references/
+├── assets/
+└── scripts/
+```
+
+**Code change:** edit `src/app/internal/Sidebar.tsx` — `TOP_SECTIONS` array adds `'homebase', 'family', 'service'`. Edit `src/app/internal/agents.ts` — `AGENTS` registry adds `homebase/farmer`, `homebase/builder`, `family/wife`, `service`. Edit `src/app/internal/page.tsx` overview to include new agent cards.
+
+**Success criteria:**
+- Sidebar shows Project / God / Body / Homebase / Family / Service / Finances / Sources / Whiteboards
+- Click `/internal/homebase/farmer` → SKILL.md + chat panel (placeholder) renders
+- Click `/internal/family/wife` → same
+- Click `/internal/service` → same
+
+**Commit msg:** `feat(brain): scaffold Homebase, Family, Service domains (Phase 1.7)`
+
+---
+
+### Phase 1.8 — Migrate my-wife/ from app.avry into brain/family/wife/
+
+**Goal:** consolidate the wife knowledge base into the new brain structure.
+
+**Existing material at** `~/Developer/app.avry/life/my-wife/`:
+- Research material (sources — third-party content)
+- Field log (Avry's own observations over time)
+- (Other artifacts — inspect before moving)
+
+**Migration map:**
+
+| From | To | Why |
+|---|---|---|
+| Raw research files (book notes, articles, theory) | `brain/sources/research/` | Channel-typed archive — these are SOURCES |
+| Distilled wife-relevant references | `brain/family/wife/references/` | Curated for the wife agent |
+| Field log entries | `brain/family/wife/references/field-log/` (if many) OR `brain/family/wife/references/field-log.md` (if one rolling doc) | Synthesis, scoped to wife agent |
+| Wife-profile material (about her specifically) | `brain/family/wife/references/wife-profile/` | Subdivision within agent references |
+
+**Read app.avry/life/my-wife/ first**, propose specific filename map, get Avry's approval, then execute. Don't bulk-move without inspection — content may have sensitive material to handle deliberately.
+
+**Decide also:** what to do at the OLD location after move?
+- (a) Delete (clean cut)
+- (b) Leave as frozen archive (matches conversations/ pattern)
+- (c) Symlink back from old → new (works locally, fails on different machines)
+
+Recommend (a) — clean cut. Migration is intentional.
+
+**Commit msg:** `brain(family): migrate my-wife/ from app.avry into brain/family/wife/ (Phase 1.8)`
+
+---
+
 ### Phase 2 — Chat placeholder + agent definitions
 
 **Goal:** every agent page (`/internal/body/chef`, `/internal/body/trainer`, `/internal/body/herbalist`, `/internal/god`, `/internal/finances`) has a right-side chat panel — inert, but visually present. Each agent's `SKILL.md` gets real content: name, description, scope, draft system prompt. No actual LLM calls yet.
@@ -313,6 +419,9 @@ This is its own conversation. PLAN.md gets updated after that session.
 | 11 | Bulk-migrate historical conversations archive? | NO — defer indefinitely. `app.avry/conversations/` stays as frozen archive. Phase 1.5 only repoints going-forward writes. | If you ever want chat agents to access pre-Phase-1.5 history |
 | 12 | Use `INBOX_ROOT` env var across all sync programs? | YES if cheap — one env change vs editing 4 repos for future moves. Defer if Swift app makes it painful. | When making this kind of move again |
 | 13 | When does data leave `brain/` and enter a DB? | Files-in-repo for unstructured agent knowledge (markdown, voice memo binaries). DB (Postgres / Supabase) for structured + relational data only: chat history persistence (Phase 4+), contact / lead forms, anything multi-row queryable. Object storage (Vercel Blob / R2) for binaries when repo bloat hurts deploy. | Per new feature — ask "is this structured + queryable?" → DB. "Is this >50MB binary?" → object storage. "Else?" → file in brain. |
+| 14 | **What is the Service domain?** | UNDEFINED. Avry mentioned it but didn't expand. Possible interpretations: (a) service to community / giving back / contribution as a life pillar; (b) service businesses / work as service / customer-facing ops; (c) service workers (housekeeper, gardener, helpers as a network). Scaffold the folder in Phase 1.7 as a placeholder; define scope in a follow-up conversation before Phase 4 wiring. | Before adding real content to `service/references/`. |
+| 15 | Cross-agent knowledge — duplicate or shared layer? | DUPLICATE the lens-specific framing into each agent's `references/`. The herbalist's lunar-farming knowledge lives in herbalist (the source) AND in farmer (the practitioner lens) — same facts, different framing. Per Anthropic's bounded-specialization principle: each agent owns its scope. No `brain/shared/` folder. | If duplication grows past ~3 cross-references per topic AND becomes unmaintainable. Then consider symlinks or a shared-layer experiment. |
+| 16 | How sub-agents emerge within a domain | Pattern: a domain starts with one agent. When a sub-specialization earns ≥10 files OR a named persona emerges (chef, trainer, herbalist, farmer, builder, wife), promote it to a sub-agent folder with its own SKILL.md. Don't pre-build sub-agents for hypothetical needs. | Each domain decides for itself when sub-folders become real agents. |
 
 ---
 
@@ -390,15 +499,21 @@ Initial agents to scaffold in Phase 2:
 
 ---
 
-## 9. Next actions
+## 9. Next actions (updated 2026-05-16)
 
-1. Avry confirms PLAN.md reads correctly.
-2. Avry debugs voice-memo sync (most recent memo is 2026-05-13; nothing from 2026-05-14/15 in `app.avry/conversations/voice-memos/inbox/`). Herbalist memo lands via Phase 1.5 sync repoint whenever it's recovered — no longer blocking Phase 1.
-3. ADMIN_PASSWORD decided (Avry has the value). Claude writes to `.env.local` in Phase 0.
-4. Claude executes Phase 0. Commits. Avry verifies locally + on Vercel preview.
-5. Claude executes Phase 1. Commits. Avry verifies.
-6. Claude executes Phase 1.5 (repoint sync programs). Commits in each affected repo. Avry verifies by recording one new voice memo and confirming it lands in the new location.
-7. Continue through Phase 4. Phase 5 (financial agent content + Plaid) is a separate session.
+**Shipped:** Phases 0, 1, 1.5, 1.6, 2, 3 (+ scratch whiteboard). Herbalist memo migrated from old archive into `brain/sources/voice-memos/`. First synthesis whiteboard at `brain/body/herbalist/references/2026-05-13-nosara-apothecary-conversation.excalidraw`.
+
+**Up next (in order):**
+
+1. **Phase 1.7 — Expand domains.** Scaffold Homebase + Family + Service folders + sub-agents + SKILL.md + READMEs. Wire sidebar TOP_SECTIONS and agents.ts registry. ONE commit.
+2. **Phase 1.8 — Migrate my-wife/.** Read `~/Developer/app.avry/life/my-wife/` first, propose detailed mapping, get Avry's approval, then move. Delete old location after move (clean cut).
+3. **Phase 4 — Wire up chat.** Vercel AI SDK + Anthropic SDK. ChatPanel becomes interactive. Each agent loads its own SKILL.md + references/ as context, streams responses. Anthropic API key needed in `.env.local` and Vercel.
+4. **Phase 5 — Financial agent content scoping.** Separate session covering accounts, Plaid, P&L, tax docs.
+5. **Phase 6+ — Gradually migrate other life content.** `app.avry/life/body/`, `places/`, `ancient-wisdom/`, `material/`, etc. Slow, per-conversation pace per Avry's preference.
+
+**Open in §5:** Service domain scope (row 14) needs definition before Phase 4 wiring of the service agent.
+
+**Pattern established:** the herbalist whiteboard at `brain/body/herbalist/references/2026-05-13-nosara-apothecary-conversation.excalidraw` is the template for future source distillation — 3 columns (Knowledge / Quotes / Actions) + cross-agent routing notes. Replicate for other long-form captures.
 
 PLAN.md gets updated at the end of each phase with what actually shipped vs what was planned.
 
