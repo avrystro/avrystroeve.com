@@ -149,7 +149,7 @@ export default function HomePage() {
             <p>
               I am an explorer of conversation, of words, of how things work.
               I live for the exploration - not only of my own mind, but of
-              other people's minds, their memories, desires, and dreams.
+              other people&apos;s minds, their memories, desires, and dreams.
               Machines and computers and inventions. Economies. The world.
             </p>
           </div>

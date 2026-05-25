@@ -395,7 +395,9 @@ export default function FileView({ segments }: { segments: string[] }) {
     // via /api/canvas (which create-on-read for missing files).
     if (isCanvas) return
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPayload(null)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setErr(null)
     fetch(`/api/file/${pathStr}`, { cache: 'no-store' })
       .then(async (r) => {

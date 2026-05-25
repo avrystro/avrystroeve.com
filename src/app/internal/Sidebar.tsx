@@ -131,6 +131,7 @@ export default function Sidebar() {
       acc.push(prev + seg)
       return acc
     }, [])
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setExpanded((curr) => {
       const next = new Set(curr)
       ancestors.forEach((a) => next.add(a))
