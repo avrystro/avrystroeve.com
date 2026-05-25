@@ -24,6 +24,12 @@
 .DS_Store
 *.pem
 
+# binary captures (stored in Supabase Storage, not git)
+*.m4a
+*.mp4
+*.wav
+*.mp3
+
 # debug
 npm-debug.log*
 yarn-debug.log*
