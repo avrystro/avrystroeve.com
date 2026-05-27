@@ -14,9 +14,9 @@ One sentence in the subject line. Body optional for context.
 ## Branches
 
 - `main` — production. Always deployable.
-- `feat/<slug>` — feature branches.
-- `fix/<slug>` — bug fix branches.
-- `chore/<slug>` — housekeeping branches.
+- `feat/<issue>-<slug>` — feature branches (e.g. `feat/3-supabase-setup`).
+- `fix/<issue>-<slug>` — bug fix branches (e.g. `fix/15-login-redirect`).
+- `chore/<slug>` — housekeeping (no issue needed).
 
 ## Pull requests
 

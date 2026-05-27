@@ -99,7 +99,7 @@ docs/
 
 ### Branches
 
-`feat/<slug>`, `fix/<slug>`, `chore/<slug>` — e.g. `feat/move-agent-skills`, `fix/lint-errors`.
+`feat/<issue>-<slug>`, `fix/<issue>-<slug>`, `chore/<slug>` — e.g. `feat/3-supabase-setup`, `fix/15-login-redirect`. Issue number connects branch to GitHub Issue at a glance.
 
 ### Commits
 
