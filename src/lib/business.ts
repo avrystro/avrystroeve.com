@@ -7,7 +7,7 @@ export const BUSINESS = {
   legalName: "Avry Stroeve",
   addressLine1: "237 Cook St",
   addressLine2: "Denver, CO 80206",
-  email: "avrystroeve@gmail.com",
+  email: "avrystro@gmail.com",
   // Phone number used to verify the brand in GoHighLevel (A2P 10DLC).
   // Typed as string so conditional phone rendering type-checks under
   // `next build`.
