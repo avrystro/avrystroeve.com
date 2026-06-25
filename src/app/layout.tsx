@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "@/components/providers";
 import { Nav } from "@/components/nav";
 import { GhlChat } from "@/components/ghl-chat";
+import { SiteFooter } from "@/components/site-footer";
 
 const headingFont = Montserrat({
   variable: "--font-heading",
@@ -55,6 +56,7 @@ export default function RootLayout({
         <Providers>
           <Nav />
           {children}
+          <SiteFooter />
           <GhlChat />
         </Providers>
       </body>

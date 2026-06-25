@@ -287,17 +287,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Footer ── */}
-      <footer className="py-12 px-6 border-t border-gray-100">
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="swiss text-xs tracking-[0.25em] text-gray-400">
-            Avry Stroeve
-          </p>
-          <p className="text-xs text-gray-400 font-light">
-            Nosara, Costa Rica
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }
