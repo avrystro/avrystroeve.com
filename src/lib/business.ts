@@ -10,7 +10,9 @@ export const BUSINESS = {
   email: "avrystroeve@gmail.com",
   // TODO: add the phone number used to verify the brand in GoHighLevel.
   // Required for A2P compliance — leave empty until provided.
-  phone: "",
+  // Typed as string (not the literal "") so conditional phone rendering
+  // type-checks under `next build`.
+  phone: "" as string,
   site: "https://www.avrystroeve.com",
   lastUpdated: "June 24, 2026",
 } as const;
