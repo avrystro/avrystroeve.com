@@ -2,6 +2,8 @@
 
 > AGENTS.md is canonical. CLAUDE.md is a symlink to this file.
 
+Notion Project: https://app.notion.com/p/38a15881a2258112a9ded56ebe43875b
+
 Personal brand site (front) and admin dashboard (back). The whole repo is the single source of truth for Avry's public web presence AND his private personal-AI brain.
 
 ## Two surfaces

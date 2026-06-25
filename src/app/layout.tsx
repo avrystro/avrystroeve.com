@@ -3,6 +3,7 @@ import { Montserrat, Inter, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { Nav } from "@/components/nav";
+import { GhlChat } from "@/components/ghl-chat";
 
 const headingFont = Montserrat({
   variable: "--font-heading",
@@ -54,6 +55,7 @@ export default function RootLayout({
         <Providers>
           <Nav />
           {children}
+          <GhlChat />
         </Providers>
       </body>
     </html>
